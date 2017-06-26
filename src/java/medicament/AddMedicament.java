@@ -1,62 +1,43 @@
+
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+* To change this license header, choose License Headers in Project Properties.
+* To change this template file, choose Tools | Templates
+* and open the template in the editor.
  */
 package medicament;
 
-import beans.InvestigationFacadeLocal;
-import beans.MedicamentFacadeLocal;
-import entity.Investigation;
-import entity.Medicament;
 import java.io.IOException;
+
 import javax.ejb.EJB;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import beans.InvestigationFacadeLocal;
+import beans.MedicamentFacadeLocal;
+
+import entity.Investigation;
+import entity.Medicament;
+
 /**
  *
  * @author Taleb
  */
-@WebServlet(name = "AddMedicament", urlPatterns = "/AddMedicament")
+@WebServlet(
+    name        = "AddMedicament",
+    urlPatterns = "/AddMedicament"
+)
 public class AddMedicament extends HttpServlet {
-
     @EJB
     private InvestigationFacadeLocal investigationFacade;
-
     @EJB
-    private MedicamentFacadeLocal medicamentFacade;
-
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-
-        String kind = request.getParameter("kind");
-        String titre = request.getParameter("titre");
-
-        switch (kind) {
-            case "medic": {
-                Medicament medicament = new Medicament();
-                medicament.setTitre(titre);
-                medicamentFacade.create(medicament);
-                break;
-            }
-            case "inves": {
-                Investigation investigation = new Investigation();
-                investigation.setTitre(titre);
-                investigationFacade.create(investigation);
-                break;
-
-            }
-        }
-
-        request.getRequestDispatcher("/Medicaments").forward(request, response);
-
-    }
+    private MedicamentFacadeLocal    medicamentFacade;
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+
     /**
      * Handles the HTTP <code>GET</code> method.
      *
@@ -85,6 +66,34 @@ public class AddMedicament extends HttpServlet {
         processRequest(request, response);
     }
 
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String kind  = request.getParameter("kind");
+        String titre = request.getParameter("titre");
+
+        switch (kind) {
+        case "medic" : {
+            Medicament medicament = new Medicament();
+
+            medicament.setTitre(titre);
+            medicamentFacade.create(medicament);
+
+            break;
+        }
+
+        case "inves" : {
+            Investigation investigation = new Investigation();
+
+            investigation.setTitre(titre);
+            investigationFacade.create(investigation);
+
+            break;
+        }
+        }
+
+        request.getRequestDispatcher("/Medicaments").forward(request, response);
+    }
+
     /**
      * Returns a short description of the servlet.
      *
@@ -93,6 +102,8 @@ public class AddMedicament extends HttpServlet {
     @Override
     public String getServletInfo() {
         return "Short description";
-    }// </editor-fold>
-
+    }    // </editor-fold>
 }
+
+
+//~ Formatted by Jindent --- http://www.jindent.com

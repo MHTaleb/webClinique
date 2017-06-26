@@ -4,40 +4,51 @@
 * To change this template file, choose Tools | Templates
 * and open the template in the editor.
  */
-package redirrect;
+package consultation;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 
 import java.util.List;
 
 import javax.ejb.EJB;
 
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import beans.ConsultationFacadeLocal;
 import beans.InvestigationFacadeLocal;
+import beans.MedecinFacadeLocal;
 import beans.MedicamentFacadeLocal;
+import beans.PatientFacadeLocal;
+import beans.ServiceFacadeLocal;
 
+import entity.Consultation;
+import entity.ExamenPreClinique;
 import entity.Investigation;
+import entity.Medecin;
 import entity.Medicament;
+import entity.Patient;
+import entity.Service;
 
 /**
  *
  * @author Taleb
  */
-@WebServlet(
-    name        = "Medicaments",
-    urlPatterns = "/Medicaments"
-)
-public class Medicaments extends HttpServlet {
+public class AddConsultation extends HttpServlet {
     @EJB
     private InvestigationFacadeLocal investigationFacade;
     @EJB
     private MedicamentFacadeLocal    medicamentFacade;
+    @EJB
+    private MedecinFacadeLocal       medecinFacade;
+    @EJB
+    private PatientFacadeLocal       patientFacade;
+    @EJB
+    private ServiceFacadeLocal       serviceFacade;
+    @EJB
+    private ConsultationFacadeLocal  consultationFacade;
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
 
@@ -80,14 +91,41 @@ public class Medicaments extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        List<Investigation> investigations = investigationFacade.findAll();
+        Consultation consultation = new Consultation();
+        Long         id           = Long.valueOf(request.getParameter("idService"));
+        Service      service      = serviceFacade.find(id);
 
-        request.getServletContext().setAttribute("allInvestigation", investigations);
+        consultation.setService(service);
+        id = Long.valueOf(request.getParameter("idPatient"));
 
-        List<Medicament> medicaments = medicamentFacade.findAll();
+        Patient patient = patientFacade.find(id);
 
-        request.getServletContext().setAttribute("allMedicament", medicaments);
-        request.getRequestDispatcher("/administration/Medicament/medicament.jsp").forward(request, response);
+        consultation.setPatient(patient);
+
+        Medecin medecin = medecinFacade.find(Long.valueOf(request.getServletContext()
+                                                                 .getAttribute("current-secretaire-id")
+                                                                 .toString()));
+
+        consultation.setMedecin(medecin);
+
+        ExamenPreClinique examenPreClinique = new ExamenPreClinique();
+
+        examenPreClinique.setGlycemie(request.getParameter("glycemie"));
+        examenPreClinique.setPoids(request.getParameter("poids"));
+        examenPreClinique.setTaille(request.getParameter("taille"));
+        examenPreClinique.setTension(request.getParameter("tension"));
+        consultation.setExamenPreClinique(examenPreClinique);
+        consultationFacade.create(consultation);
+        request.setAttribute("currentConsultation", consultation);
+
+        List<Medicament> allMedicaments = medicamentFacade.findAll();
+
+        request.setAttribute("allMedicaments", allMedicaments);
+
+        List<Investigation> allInvestigations = investigationFacade.findAll();
+
+        request.setAttribute("allInvestigations", allInvestigations);
+        request.getRequestDispatcher("/administration/consultation/consultationEtape2.jsp").forward(request, response);
     }
 
     /**

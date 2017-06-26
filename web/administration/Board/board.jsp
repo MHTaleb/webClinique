@@ -86,11 +86,11 @@
 
             <!-- Header -->
             <header class="w3-container" style="padding-top:22px">
-                <h5><b><i class="fa fa-dashboard"></i> My Dashboard</b></h5>
+                <h5><b><i class="fa fa-dashboard"></i> Menu Raccoursi</b></h5>
             </header>
             <!-- Top Menu-->
-              <%if (isMedecin) {%>
             <div class="w3-row-padding w3-margin-bottom">
+              <%if (isMedecin) {%>
                 <form method="post" action="./Consultation">
                     <button class=" w3-button w3-hover-none w3-quarter" style="min-height: 180px">
                         <div class="w3-container w3-hover-green w3-blue w3-padding-16">

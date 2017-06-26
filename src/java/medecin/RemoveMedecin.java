@@ -1,62 +1,43 @@
+
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+* To change this license header, choose License Headers in Project Properties.
+* To change this template file, choose Tools | Templates
+* and open the template in the editor.
  */
 package medecin;
 
-import beans.MedecinFacadeLocal;
-import beans.UtilisateurFacadeLocal;
-import entity.Medecin;
-import entity.Utilisateur;
 import java.io.IOException;
+
 import javax.ejb.EJB;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import beans.MedecinFacadeLocal;
+import beans.UtilisateurFacadeLocal;
+
+import entity.Medecin;
+import entity.Utilisateur;
+
 /**
  *
  * @author Taleb
  */
-@WebServlet(name = "RemoveMedecin", urlPatterns = "/RemoveMedecin")
+@WebServlet(
+    name        = "RemoveMedecin",
+    urlPatterns = "/RemoveMedecin"
+)
 public class RemoveMedecin extends HttpServlet {
-
     @EJB
     private UtilisateurFacadeLocal utilisateurFacade;
-
     @EJB
-    private MedecinFacadeLocal medecinFacade;
-
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-
-        String stringId = request.getParameter("id");
-        String todo = request.getParameter("todo");
-
-        Long id = Long.valueOf(stringId);
-
-        Medecin medecin = medecinFacade.find(id);
-        switch (todo) {
-            case "delete": {
-                Utilisateur utilisateur = medecin.getUtilisateur();
-                utilisateurFacade.remove(utilisateur);
-                medecinFacade.remove(medecin);
-                request.getRequestDispatcher("/Personnel").forward(request, response);
-                break;
-            }
-
-            case "modifier": {
-                request.getServletContext().setAttribute("medecin", medecin);
-                request.getRequestDispatcher("/administration/personnel/personnelUpdate.jsp").forward(request, response);
-            }
-        }
-
-    }
+    private MedecinFacadeLocal     medecinFacade;
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+
     /**
      * Handles the HTTP <code>GET</code> method.
      *
@@ -85,6 +66,31 @@ public class RemoveMedecin extends HttpServlet {
         processRequest(request, response);
     }
 
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String  stringId = request.getParameter("id");
+        String  todo     = request.getParameter("todo");
+        Long    id       = Long.valueOf(stringId);
+        Medecin medecin  = medecinFacade.find(id);
+
+        switch (todo) {
+        case "delete" : {
+            Utilisateur utilisateur = medecin.getUtilisateur();
+
+            utilisateurFacade.remove(utilisateur);
+            medecinFacade.remove(medecin);
+            request.getRequestDispatcher("/Personnel").forward(request, response);
+
+            break;
+        }
+
+        case "modifier" : {
+            request.getServletContext().setAttribute("medecin", medecin);
+            request.getRequestDispatcher("/administration/personnel/personnelUpdate.jsp").forward(request, response);
+        }
+        }
+    }
+
     /**
      * Returns a short description of the servlet.
      *
@@ -93,6 +99,8 @@ public class RemoveMedecin extends HttpServlet {
     @Override
     public String getServletInfo() {
         return "Short description";
-    }// </editor-fold>
-
+    }    // </editor-fold>
 }
+
+
+//~ Formatted by Jindent --- http://www.jindent.com

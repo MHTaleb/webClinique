@@ -1,49 +1,41 @@
+
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+* To change this license header, choose License Headers in Project Properties.
+* To change this template file, choose Tools | Templates
+* and open the template in the editor.
  */
 package rdv;
 
-import beans.RDVFacadeLocal;
-import entity.RDV;
 import java.io.IOException;
+
 import java.util.List;
+
 import javax.ejb.EJB;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import beans.RDVFacadeLocal;
+
+import entity.RDV;
+
 /**
  *
  * @author Taleb
  */
-@WebServlet(name = "RDVHandler",urlPatterns = "/RDVHandler")
+@WebServlet(
+    name        = "RDVHandler",
+    urlPatterns = "/RDVHandler"
+)
 public class RDVHandler extends HttpServlet {
-
     @EJB
     private RDVFacadeLocal rDVFacade;
 
-  
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-
-        String action = request.getParameter("todo");
-        Long id = Long.valueOf(request.getParameter("id"));
-        RDV processedRDV = rDVFacade.find(id);
-        if (action.equalsIgnoreCase("delete")) {
-            rDVFacade.remove(processedRDV);
-        }else{
-            processedRDV.setIsValide(true);
-            rDVFacade.edit(processedRDV);
-        }
-        request.getRequestDispatcher("./AllRDV").forward(request, response);
-        
-    }
-
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+
     /**
      * Handles the HTTP <code>GET</code> method.
      *
@@ -72,6 +64,22 @@ public class RDVHandler extends HttpServlet {
         processRequest(request, response);
     }
 
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String action       = request.getParameter("todo");
+        Long   id           = Long.valueOf(request.getParameter("id"));
+        RDV    processedRDV = rDVFacade.find(id);
+
+        if (action.equalsIgnoreCase("delete")) {
+            rDVFacade.remove(processedRDV);
+        } else {
+            processedRDV.setIsValide(true);
+            rDVFacade.edit(processedRDV);
+        }
+
+        request.getRequestDispatcher("./AllRDV").forward(request, response);
+    }
+
     /**
      * Returns a short description of the servlet.
      *
@@ -80,6 +88,8 @@ public class RDVHandler extends HttpServlet {
     @Override
     public String getServletInfo() {
         return "Short description";
-    }// </editor-fold>
-
+    }    // </editor-fold>
 }
+
+
+//~ Formatted by Jindent --- http://www.jindent.com

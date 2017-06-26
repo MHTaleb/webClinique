@@ -58,7 +58,11 @@ boolean isMedecin = ((String) (request.getServletContext().getAttribute("isMedec
         <nav class="w3-sidebar w3-collapse w3-white w3-animate-left" style="z-index:3;width:300px;" id="mySidebar"><br>
             <div class="w3-container w3-row">
                 <div class="w3-col s4">
+                    <%if (isMedecin) {%>
+                    <img src="../images/doctorMan.png" class="w3-circle w3-margin-right" style="width:46px">
+                    <%} else {%>
                     <img src="../images/stewardess.png" class="w3-circle w3-margin-right" style="width:46px">
+                    <%}%>
                 </div>
                 <div class="w3-col s8 w3-bar">
                     <span>Bonjour, <strong> <%=name%> <%=lastName%></strong></span><br>
@@ -69,18 +73,28 @@ boolean isMedecin = ((String) (request.getServletContext().getAttribute("isMedec
                         <div class="w3-container">
                 <h5>Menu</h5>
             </div>
+            <%if (isMedecin) {%>
+            <div class="w3-bar-block">
+                <a href="#" class="w3-bar-item w3-button w3-padding-16 w3-hide-large w3-dark-grey w3-hover-black" onclick="w3_close()" title="close menu"><i class="fa fa-remove fa-fw"></i>  Close Menu</a>
+                <a href="./Board" class="w3-bar-item w3-button w3-padding "><i class="fa fa-home fa-fw"></i>  Prinipal</a>
+                <a href="./Consultation" class="w3-bar-item w3-button w3-padding"><i class="fa fa-stethoscope fa-fw"></i>  Consultation</a>
+                <a href="./Medicaments" class="w3-bar-item w3-button w3-padding"><i class="fa fa-medkit fa-fw"></i>  Medicaments et Investigation</a>
+                <a href="./Personnel" class="w3-bar-item w3-button w3-padding w3-blue"><i class="fa fa-user-md fa-fw"></i>  Personnel </a>
+                <a href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa-cog fa-fw"></i>  Settings</a><br><br>
+            </div>
+            <%} else {%>
             <div class="w3-bar-block">
                 <a href="#" class="w3-bar-item w3-button w3-padding-16 w3-hide-large w3-dark-grey w3-hover-black" onclick="w3_close()" title="close menu"><i class="fa fa-remove fa-fw"></i>  Close Menu</a>
                 <a href="./Board" class="w3-bar-item w3-button w3-padding "><i class="fa fa-home fa-fw"></i>  Prinipal</a>
                 <a href="./ShowAllClient" class="w3-bar-item w3-button w3-padding "><i class="fa fa-users fa-fw"></i>  Liste des clients</a>
                 <a href="./AllRDV" class="w3-bar-item w3-button w3-padding"><i class="fa fa-calendar fa-fw"></i>  Rendez-Vous</a>
-                <a href="./Consultation" class="w3-bar-item w3-button w3-padding"><i class="fa fa-stethoscope fa-fw"></i>  Consultation</a>
                 <a href="./Medicaments" class="w3-bar-item w3-button w3-padding"><i class="fa fa-medkit fa-fw"></i>  Medicaments et Investigation</a>
                 <a href="./Personnel" class="w3-bar-item w3-button w3-padding w3-blue"><i class="fa fa-user-md fa-fw"></i>  Personnel </a>
                 <a href="./ServiceRedirect" class="w3-bar-item w3-button w3-padding"><i class="fa fa-bank fa-fw"></i>  Service</a>
                 <a href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa-history fa-fw"></i>  History</a>
                 <a href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa-cog fa-fw"></i>  Settings</a><br><br>
             </div>
+            <%}%>
         </nav>
 
 
@@ -90,12 +104,14 @@ boolean isMedecin = ((String) (request.getServletContext().getAttribute("isMedec
         <!-- !PAGE CONTENT! -->
         <div class="w3-main" style="margin-left:300px;margin-top:43px;">
 
+           
             <!-- Header -->
             <header class="w3-container" style="padding-top:22px">
-                <h5><b><i class="fa fa-dashboard"></i> My Dashboard</b></h5>
+                <h5><b><i class="fa fa-dashboard"></i> Menu Raccoursi</b></h5>
             </header>
             <!-- Top Menu-->
             <div class="w3-row-padding w3-margin-bottom">
+              <%if (isMedecin) {%>
                 <form method="post" action="./Consultation">
                     <button class=" w3-button w3-hover-none w3-quarter" style="min-height: 180px">
                         <div class="w3-container w3-hover-green w3-blue w3-padding-16">
@@ -108,6 +124,8 @@ boolean isMedecin = ((String) (request.getServletContext().getAttribute("isMedec
                         </div>
                     </button>
                 </form>
+                <%}%>
+                <%if (!isMedecin) {%>
                 <form method="post" action="./AllRDV">
                     <button class=" w3-button w3-hover-none w3-quarter" value="showAllClients" type="submit" style="min-height: 180px">
                         <div class="w3-container w3-hover-aqua w3-teal w3-padding-16">
@@ -134,6 +152,8 @@ boolean isMedecin = ((String) (request.getServletContext().getAttribute("isMedec
                         </div>
                     </button>
                 </form>
+                <%}%>
+
             </div>
                             
              <!-- Medecin -->               

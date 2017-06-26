@@ -113,6 +113,14 @@
         <servlet-name>RemoveService</servlet-name>
         <servlet-class>service.RemoveService</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ConsultationRemove</servlet-name>
+        <servlet-class>consultation.ConsultationRemove</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>AddConsultation</servlet-name>
+        <servlet-class>consultation.AddConsultation</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Faces Servlet</servlet-name>
         <url-pattern>/faces/*</url-pattern>
@@ -221,6 +229,14 @@
         <servlet-name>RemoveService</servlet-name>
         <url-pattern>/RemoveService</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ConsultationRemove</servlet-name>
+        <url-pattern>/ConsultationRemove</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AddConsultation</servlet-name>
+        <url-pattern>/AddConsultation</url-pattern>
+    </servlet-mapping>
     <session-config>
         <session-timeout>
             30
@@ -235,4 +251,5 @@
             <url-pattern>/administration/Login/index.jsp</url-pattern>
         </jsp-property-group>
     </jsp-config>
+   
 </web-app>

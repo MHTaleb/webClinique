@@ -4,7 +4,7 @@
 * To change this template file, choose Tools | Templates
 * and open the template in the editor.
  */
-package client;
+package consultation;
 
 import java.io.IOException;
 
@@ -18,21 +18,29 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import beans.PatientFacadeLocal;
+import beans.ConsultationFacadeLocal;
+import beans.InvestigationFacadeLocal;
+import beans.MedicamentFacadeLocal;
 
-import entity.Patient;
+import entity.Consultation;
+import entity.Investigation;
+import entity.Medicament;
 
 /**
  *
  * @author Taleb
  */
 @WebServlet(
-    name        = "ShowAllClient",
-    urlPatterns = "/ShowAllClient"
+    name        = "ConsultationRemove",
+    urlPatterns = "/ConsultationRemove"
 )
-public class ShowAllClient extends HttpServlet {
+public class ConsultationRemove extends HttpServlet {
     @EJB
-    private PatientFacadeLocal patientFacade;
+    private InvestigationFacadeLocal investigationFacade;
+    @EJB
+    private ConsultationFacadeLocal  consultationFacade;
+    @EJB
+    private MedicamentFacadeLocal    medicamentFacade;
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
 
@@ -64,21 +72,27 @@ public class ShowAllClient extends HttpServlet {
         processRequest(request, response);
     }
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        List<Patient> patients = patientFacade.findAll();
+        Long               id           = Long.valueOf(request.getParameter("id"));
+        String             option       = request.getParameter("todo");
+        final Consultation consultation = consultationFacade.find(id);
 
-        request.getServletContext().setAttribute("allClient", patients);
-        request.getRequestDispatcher("/administration/client/client.jsp").forward(request, response);
+        if (option.equalsIgnoreCase("delete")) {
+            consultationFacade.remove(consultation);
+            request.getRequestDispatcher("/Consultation").forward(request, response);
+        } else {
+            List<Medicament> allMedicaments = medicamentFacade.findAll();
+
+            request.getServletContext().setAttribute("allMedicaments", allMedicaments);
+
+            List<Investigation> allInvestigations = investigationFacade.findAll();
+
+            request.getServletContext().setAttribute("allInvestigations", allInvestigations);
+            request.getServletContext().setAttribute("consultation", consultation);
+            request.getRequestDispatcher("/administration/consultation/consultationEdit.jsp")
+                   .forward(request, response);
+        }
     }
 
     /**
