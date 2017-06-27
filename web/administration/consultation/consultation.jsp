@@ -202,7 +202,7 @@
         <div class=" w3-margin w3-card-4 w3-white" >
 
             <div class="w3-container w3-lime">
-                <h2>Formulaire d'ajout d'investigation : Etape 1/2</h2>
+                <h2>Formulaire d'ajout de Consultation Medical </h2>
             </div>
 
             <form action="./AddConsultation" method="post" class="w3-container w3-row-padding w3-margin">
@@ -213,7 +213,7 @@
                         divCon = document.getElementById("con");
                         divInve = document.getElementById("inv");
 
-                        if (id == 1) {
+                        if (id === 1) {
                             checkbox = document.getElementById("ordononce");
 
                             if (checkbox.checked) {
@@ -276,39 +276,131 @@
 
                 <br>
                 <input type="checkbox" class="w3-check " name="ordonnanceType"  onclick="showForm(1)" id="ordononce"  /> <label for="ordononce" >  Ordonance Medicament</label>
-                <br>
-                <div id="con" class="w3-container w3-border-green" style="visibility: none;">
-                    <div class="w3-green">
-                        <h2>    
-                            Liste des Medicaments
-                        </h2>
-                    </div>
-                    <script>
-                        function searchMedic() {
-
+                <script>
+                    function searchMedic() {
+                        var input, filter, ul, li, i;
+                        input = document.getElementById("seachMedic");
+                        filter = input.value.toUpperCase();
+                        ul = document.getElementById("myList");
+                        li = ul.getElementsByTagName("li");
+                        for (i = 0; i < li.length; i++) {
+                            if (li[i].innerHTML.toUpperCase().indexOf(filter) > -1) {
+                                li[i].style.display = "";
+                            } else {
+                                li[i].style.display = "none";
+                            }
                         }
-                    </script>
-                    <input type="search" id="seachMedic" placeholder="rechercher un medicament" />
-                    <div class="w3-border">
-                        <ul>
+                    }
+                    function addMedic(id, title) {
+                        var tbody = document.getElementById("tableMedic").getElementsByTagName("tbody");
+                        var doIt = 0;
+                        for (var i = 0; i < tbody.length; i++) {
+                            if (tbody[i].innerHTML.toUpperCase().indexOf(title.toUpperCase()) > -1) {
+                                doIt = 1;
+                                break;
+                            }
+                        }
+
+                        if (doIt == 0) {
+                            document.getElementById("tableMedic").getElementsByTagName("tbody")[0].innerHTML += "<tr onClick='removeMedic(this)'> <input id='" + id + "' type='hidden' name='medicamentAdded' value='" + id + "' /> <td>" + title + "</td></tr>";
+                        }
+
+                    }
+                    function removeMedic(r) {
+                        var i = r.rowIndex;
+                        document.getElementById("tableMedic").deleteRow(i);
+                    }
+                </script>
+                <div id="con" class="w3-container" style="display:  none;">
+                    <br>
+                    <br>
+                    <div>
+                        <div class="w3-container w3-red">
+                            <h2>Liste des Medicaments</h2>
+                        </div>
+                        <input type="search" class="w3-input w3-border" id="seachMedic" onkeyup="searchMedic()" placeholder="rechercher un medicament" />
+                        <ul class="w3-ul" id="myList" style="max-height: 560px;overflow-y: auto;">
                             <%for (int i = 0; i < allMedicaments.size(); i++) {%>
-
-                            <%}%>
+                            <li  class="w3-li w3-large w3-light-gray  w3-hover-indigo" id="<%out.print(allMedicaments.get(i).getId());%>" onclick="addMedic(<%out.print(allMedicaments.get(i).getId());%>, '<%out.print(allMedicaments.get(i).getTitre());%>')"> <%out.print(allMedicaments.get(i).getTitre());%> </li>
+                                <%}%>
                         </ul>
-                    </div>>
+                        <br>    
+                        <br>
+                        <table id="tableMedic" class="w3-table-all w3-hoverable ">
+                            <thead>
+                                <tr> <th><b>Ordonance </b></th> </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                        <br>    
+                        <br>
+                    </div>
                 </div>
-
                 <br>
+              
+                <script>
+                    function searchInv() {
+                        var input, filter, ul, li, i;
+                        input = document.getElementById("seachInv");
+                        filter = input.value.toUpperCase();
+                        ul = document.getElementById("myInvs");
+                        li = ul.getElementsByTagName("li");
+                        for (i = 0; i < li.length; i++) {
+                            if (li[i].innerHTML.toUpperCase().indexOf(filter) > -1) {
+                                li[i].style.display = "";
+                            } else {
+                                li[i].style.display = "none";
+                            }
+                        }
+                    }
+                    function addInv(id, title) {
+                        var tbody = document.getElementById("tableInv").getElementsByTagName("tbody");
+                        var doIt = 0;
+                        for (var i = 0; i < tbody.length; i++) {
+                            if (tbody[i].innerHTML.toUpperCase().indexOf(title.toUpperCase()) > -1) {
+                                doIt = 1;
+                                break;
+                            }
+                        }
+
+                        if (doIt == 0) {
+                            document.getElementById("tableInv").getElementsByTagName("tbody")[0].innerHTML += " <tr onClick='removeInv(this)'> <input id='" + id + "' type='hidden' name='InvestigationAdded' value='" + id + "' /> <td>" + title + "</td></tr>";
+                        }
+
+                    }
+                    function removeInv(r) {
+                        var i = r.rowIndex;
+                        document.getElementById("tableInv").deleteRow(i);
+                    }
+                </script>
 
                 <input type="checkbox" class="w3-check " name="investigationType" onclick="showForm(2)" id="investigation"  /> <label for="ordononce" >  Ordonance Investigation</label>
-                <br>
-                <div id="inv" class="w3-container w3-border-red" style="visibility: none;">
-                    <div class="w3-red">
-                        <h2>    
-                            Liste des Investigations
-                        </h2>
+                <div id="inv" class="w3-container w3-border-red" style="display:  none;">
+                    <br>
+                    <br>
+                    <div>
+                        <div class="w3-container w3-blue-gray w3-blue-grey ">
+                            <h2>Liste des Analyses</h2>
+                        </div>
+                        <input type="search" class="w3-input w3-border" id="seachInv" onkeyup="searchInv()" placeholder="rechercher une Analyse" />
+                        <ul class="w3-ul" id="myInvs" style="max-height: 560px;overflow-y: auto;">
+                            <%for (int i = 0; i < allInvestigations.size(); i++) {%>
+                            <li  class="w3-li w3-large w3-light-gray  w3-hover-indigo" id="<%out.print(allInvestigations.get(i).getId());%>" onclick="addInv(<%out.print(allInvestigations.get(i).getId());%>, '<%out.print(allInvestigations.get(i).getTitre());%>')"> <%out.print(allInvestigations.get(i).getTitre());%> </li>
+                                <%}%>
+                        </ul>
+                        <br>    
+                        <br>
+                        <table id="tableInv" class="w3-table-all w3-hoverable ">
+                            <thead>
+                                <tr> <th><b>Analyses </b></th> </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                        <br>    
+                        <br>
                     </div>
-
                 </div>
 
                 <br>

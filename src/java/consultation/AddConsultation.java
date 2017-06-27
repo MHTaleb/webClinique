@@ -8,6 +8,7 @@ package consultation;
 
 import java.io.IOException;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -21,6 +22,7 @@ import beans.ConsultationFacadeLocal;
 import beans.InvestigationFacadeLocal;
 import beans.MedecinFacadeLocal;
 import beans.MedicamentFacadeLocal;
+import beans.OrdonnanceFacadeLocal;
 import beans.PatientFacadeLocal;
 import beans.ServiceFacadeLocal;
 
@@ -29,6 +31,7 @@ import entity.ExamenPreClinique;
 import entity.Investigation;
 import entity.Medecin;
 import entity.Medicament;
+import entity.Ordonnance;
 import entity.Patient;
 import entity.Service;
 
@@ -37,6 +40,8 @@ import entity.Service;
  * @author Taleb
  */
 public class AddConsultation extends HttpServlet {
+    @EJB
+    private OrdonnanceFacadeLocal    ordonnanceFacade;
     @EJB
     private InvestigationFacadeLocal investigationFacade;
     @EJB
@@ -115,17 +120,39 @@ public class AddConsultation extends HttpServlet {
         examenPreClinique.setTaille(request.getParameter("taille"));
         examenPreClinique.setTension(request.getParameter("tension"));
         consultation.setExamenPreClinique(examenPreClinique);
+
+        List<Ordonnance> ordonnances         = new ArrayList<>();
+        Ordonnance       ordonnance          = new Ordonnance();
+        String           ordonnanceNeeded    = request.getParameter("ordonnanceType");
+        String           investigationNeeded = request.getParameter("investigationType");
+
+        if (ordonnanceNeeded != null) {
+            List<Medicament> medicaments = new ArrayList<>();
+
+            for (String medicId : request.getParameterValues("medicamentAdded")) {
+                medicaments.add(medicamentFacade.find(Long.valueOf(medicId)));
+            }
+
+            ordonnance.setMedicaments(medicaments);
+        }
+        
+        if (investigationNeeded != null) {
+            List<Investigation> investigations = new ArrayList<>();
+
+            for (String investID : request.getParameterValues("InvestigationAdded")) {
+                investigations.add(investigationFacade.find(Long.valueOf(investID)));
+            }
+
+            ordonnance.setInvestigations(investigations);
+        }
+
+        ordonnanceFacade.create(ordonnance);
+        
+        ordonnances.add(ordonnance);
+        System.out.println("ordo = " + ordonnanceNeeded + "  inves = " + investigationNeeded);
+        consultation.setOrdonnances(ordonnances);
         consultationFacade.create(consultation);
-        request.setAttribute("currentConsultation", consultation);
-
-        List<Medicament> allMedicaments = medicamentFacade.findAll();
-
-        request.setAttribute("allMedicaments", allMedicaments);
-
-        List<Investigation> allInvestigations = investigationFacade.findAll();
-
-        request.setAttribute("allInvestigations", allInvestigations);
-        request.getRequestDispatcher("/administration/consultation/consultationEtape2.jsp").forward(request, response);
+        request.getRequestDispatcher("/Consultation").forward(request, response);
     }
 
     /**
