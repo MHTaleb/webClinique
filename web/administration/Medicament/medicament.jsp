@@ -5,7 +5,7 @@
 <%@page import="java.util.List"%>
 <%@page import="java.time.LocalDate"%>
 <%
-      boolean isMedecin = ((String) (request.getServletContext().getAttribute("isMedecin"))).equals("medecin");
+    boolean isMedecin = ((String) (request.getServletContext().getAttribute("isMedecin"))).equals("medecin");
     String name = (String) request.getServletContext().getAttribute("current-secretaire-name");
     String lastName = (String) request.getServletContext().getAttribute("current-secretaire-lastName");
     if (name == null) {
@@ -67,14 +67,12 @@
             <div class="w3-container">
                 <h5>Menu</h5>
             </div>
-           <%if (isMedecin) {%>
+            <%if (isMedecin) {%>
             <div class="w3-bar-block">
                 <a href="#" class="w3-bar-item w3-button w3-padding-16 w3-hide-large w3-dark-grey w3-hover-black" onclick="w3_close()" title="close menu"><i class="fa fa-remove fa-fw"></i>  Close Menu</a>
                 <a href="./Board" class="w3-bar-item w3-button w3-padding "><i class="fa fa-home fa-fw"></i>  Prinipal</a>
                 <a href="./Consultation" class="w3-bar-item w3-button w3-padding"><i class="fa fa-stethoscope fa-fw"></i>  Consultation</a>
                 <a href="./Medicaments" class="w3-bar-item w3-button w3-padding w3-blue"><i class="fa fa-medkit fa-fw"></i>  Medicaments et Investigation</a>
-                <a href="./Personnel" class="w3-bar-item w3-button w3-padding"><i class="fa fa-user-md fa-fw"></i>  Personnel </a>
-                <a href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa-cog fa-fw"></i>  Settings</a><br><br>
             </div>
             <%} else {%>
             <div class="w3-bar-block">
@@ -85,8 +83,6 @@
                 <a href="./Medicaments" class="w3-bar-item w3-button w3-padding w3-blue"><i class="fa fa-medkit fa-fw"></i>  Medicaments et Investigation</a>
                 <a href="./Personnel" class="w3-bar-item w3-button w3-padding"><i class="fa fa-user-md fa-fw"></i>  Personnel </a>
                 <a href="./ServiceRedirect" class="w3-bar-item w3-button w3-padding"><i class="fa fa-bank fa-fw"></i>  Service</a>
-                <a href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa-history fa-fw"></i>  History</a>
-                <a href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa-cog fa-fw"></i>  Settings</a><br><br>
             </div>
             <%}%>
         </nav>
@@ -98,20 +94,20 @@
         <!-- !PAGE CONTENT! -->
         <div class="w3-main" style="margin-left:300px;margin-top:43px;">
 
-           
+
             <!-- Header -->
             <header class="w3-container" style="padding-top:22px">
                 <h5><b><i class="fa fa-dashboard"></i> Menu Raccoursi</b></h5>
             </header>
             <!-- Top Menu-->
             <div class="w3-row-padding w3-margin-bottom">
-              <%if (isMedecin) {%>
+                <%if (isMedecin) {%>
                 <form method="post" action="./Consultation">
                     <button class=" w3-button w3-hover-none w3-quarter" style="min-height: 180px">
                         <div class="w3-container w3-hover-green w3-blue w3-padding-16">
                             <div class="w3-left"><i class="fa fa-stethoscope w3-xxxlarge"></i></div>
                             <div class="w3-right">
-                                <h3>99</h3>
+                                <h3></h3>
                             </div>
                             <div class="w3-clear"></div>
                             <h4>Consultation</h4>
@@ -179,10 +175,27 @@
                             for (int i = 0; i < size; i++) {
                     %>
                     <li class="w3-padding-16">
+                        <div id="id0<%=i%>" class="w3-modal">
+                            <div class="w3-modal-content w3-container">
+                                
+                                 <span onclick="document.getElementById('id0<%=i%>').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+                                 <br>
+                                 <h2>Fenetre de Modification</h2>
+                                 <form action="./MedicamentServlet" method="post" id="medic0<%=i%>">
+                                    <input type="hidden" name="id" value="<%= listMedicaments.get(i).getId()%>"/>
+                                    <input class="w3-input" type="text" name="titre" value="<%= listMedicaments.get(i).getTitre()%>"/>
+                                    <br>
+                                    
+                                    <button type="submit" class="w3-button w3-text-black w3-right w3-hover-indigo w3-quarter" name="todo" value="editMedic" title="Valider" form="medic0<%=i%>" >Valider</button>
+                                    <br>
+                                 </form>    
+                                    <br>
+                            </div>
+                        </div>
                         <form action="./MedicamentServlet" method="post" id="medic<%=i%>">
                             <input type="hidden" name="id" value="<%= listMedicaments.get(i).getId()%>"/>
                             <button type="submit" style="max-width: 40px" class="w3-button w3-text-black w3-xlarge w3-right w3-hover-red w3-quarter" name="todo" value="delete" title="Suprimmer" form="medic<%=i%>" >-</button>
-                            <button type="submit" style="max-width: 40px" class="w3-button w3-text-black w3-xlarge w3-right w3-hover-indigo w3-quarter" name="todo" value="consult" title="Valider" form="medic<%=i%>" >&vrtri;</button>
+                            <button type="button" style="max-width: 40px" class="w3-button w3-text-black w3-xlarge w3-right w3-hover-indigo w3-quarter"  onclick="document.getElementById('id0<%=i%>').style.display='block'"  >&vrtri;</button>
                         </form>    
                         <img src="../images/pills.png" class="w3-left w3-circle w3-margin-right" style="width:50px">
                         <span class="w3-xxlarge"><b><% out.print(listMedicaments.get(i).getTitre());%>  </b></span><br>
@@ -240,10 +253,29 @@
                             for (int i = 0; i < sizeInvest; i++) {
                     %>
                     <li class="w3-padding-16">
+                        
+                         <div id="id00<%=i%>" class="w3-modal">
+                            <div class="w3-modal-content w3-container">
+                                
+                                 <span onclick="document.getElementById('id00<%=i%>').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+                                 <br>
+                                 <h2>Fenetre de Modification</h2>
+                                 <form action="./InvestigationServlet" method="post" id="invest0<%=i%>">
+                                    <input type="hidden" name="id" value="<%= listInvestigations.get(i).getId()%>"/>
+                                    <input class="w3-input" type="text" name="titre" value="<%= listInvestigations.get(i).getTitre()%>"/>
+                                    <br>
+                                    
+                                    <button type="submit" class="w3-button w3-text-black w3-right w3-hover-indigo w3-quarter" name="todo" value="editInvest" title="Valider" form="invest0<%=i%>" >Valider</button>
+                                    <br>
+                                 </form>    
+                                    <br>
+                            </div>
+                        </div>
+                        
                         <form action="./InvestigationServlet" method="post" id="form<%=i%>">
                             <input type="hidden" name="id" value="<%= listInvestigations.get(i).getId()%>"/>
                             <button type="submit" style="max-width: 40px" class="w3-button w3-text-black w3-xlarge w3-right w3-hover-red w3-quarter" name="todo" value="delete" title="Suprimmer" form="form<%=i%>" >-</button>
-                            <button type="submit" style="max-width: 40px" class="w3-button w3-text-black w3-xlarge w3-right w3-hover-indigo w3-quarter" name="todo" value="consult" title="Valider" form="form<%=i%>" >&vrtri;</button>
+                            <button type="button" style="max-width: 40px" class="w3-button w3-text-black w3-xlarge w3-right w3-hover-indigo w3-quarter" onclick="document.getElementById('id00<%=i%>').style.display='block'" >&vrtri;</button>
                         </form>    
                         <img src="../images/chemistry.png" class="w3-left w3-circle w3-margin-right" style="width:50px">
                         <span class="w3-xxlarge"><b><% out.print(listInvestigations.get(i).getTitre());%> </b></span><br>

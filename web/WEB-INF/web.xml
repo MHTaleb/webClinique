@@ -121,6 +121,10 @@
         <servlet-name>AddConsultation</servlet-name>
         <servlet-class>consultation.AddConsultation</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>EditConsultation</servlet-name>
+        <servlet-class>consultation.EditConsultation</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Faces Servlet</servlet-name>
         <url-pattern>/faces/*</url-pattern>
@@ -237,6 +241,10 @@
         <servlet-name>AddConsultation</servlet-name>
         <url-pattern>/AddConsultation</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>EditConsultation</servlet-name>
+        <url-pattern>/EditConsultation</url-pattern>
+    </servlet-mapping>
     <session-config>
         <session-timeout>
             30
@@ -251,5 +259,4 @@
             <url-pattern>/administration/Login/index.jsp</url-pattern>
         </jsp-property-group>
     </jsp-config>
-   
 </web-app>

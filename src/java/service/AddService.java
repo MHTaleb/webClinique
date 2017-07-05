@@ -77,6 +77,7 @@ public class AddService extends HttpServlet {
         String   titreService        = request.getParameter("titre");
         String[] medecinAffecterIDS  = request.getParameterValues("listMedecins");
         Service  service             = new Service();
+        
         Medecin  chef_service        = medecinFacade.find(Long.valueOf(chefServiceIDString));
 
         service.setChef_service(chef_service);

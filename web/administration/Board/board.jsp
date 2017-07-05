@@ -59,8 +59,6 @@
                 <a href="./Board" class="w3-bar-item w3-button w3-padding w3-blue"><i class="fa fa-home fa-fw"></i>  Prinipal</a>
                 <a href="./Consultation" class="w3-bar-item w3-button w3-padding"><i class="fa fa-stethoscope fa-fw"></i>  Consultation</a>
                 <a href="./Medicaments" class="w3-bar-item w3-button w3-padding"><i class="fa fa-medkit fa-fw"></i>  Medicaments et Investigation</a>
-                <a href="./Personnel" class="w3-bar-item w3-button w3-padding"><i class="fa fa-user-md fa-fw"></i>  Personnel </a>
-                <a href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa-cog fa-fw"></i>  Settings</a><br><br>
             </div>
             <%} else {%>
             <div class="w3-bar-block">
@@ -71,8 +69,6 @@
                 <a href="./Medicaments" class="w3-bar-item w3-button w3-padding"><i class="fa fa-medkit fa-fw"></i>  Medicaments et Investigation</a>
                 <a href="./Personnel" class="w3-bar-item w3-button w3-padding"><i class="fa fa-user-md fa-fw"></i>  Personnel </a>
                 <a href="./ServiceRedirect" class="w3-bar-item w3-button w3-padding"><i class="fa fa-bank fa-fw"></i>  Service</a>
-                <a href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa-history fa-fw"></i>  History</a>
-                <a href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa-cog fa-fw"></i>  Settings</a><br><br>
             </div>
             <%}%>
         </nav>
@@ -96,7 +92,7 @@
                         <div class="w3-container w3-hover-green w3-blue w3-padding-16">
                             <div class="w3-left"><i class="fa fa-stethoscope w3-xxxlarge"></i></div>
                             <div class="w3-right">
-                                <h3>99</h3>
+                                <h3></h3>
                             </div>
                             <div class="w3-clear"></div>
                             <h4>Consultation</h4>

@@ -33,6 +33,7 @@ import entity.Medicament;
     urlPatterns = "/Medicaments"
 )
 public class Medicaments extends HttpServlet {
+    
     @EJB
     private InvestigationFacadeLocal investigationFacade;
     @EJB

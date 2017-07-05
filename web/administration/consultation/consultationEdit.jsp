@@ -1,5 +1,5 @@
-<%@page import="entity.Investigation"%>
 <%@page import="entity.Medicament"%>
+<%@page import="entity.Investigation"%>
 <%@page import="entity.Service"%>
 <%@page import="entity.Patient"%>
 <%@page import="entity.Consultation"%>
@@ -17,12 +17,13 @@
     String sizeRDVJour = "" + (String) request.getServletContext().getAttribute("RDV-Size");
     String clientCount = "" + (String) request.getServletContext().getAttribute("clients-Size");
 
-    Consultation currentConsultation = (Consultation) request.getServletContext().getAttribute("consultation");
-    List<Medicament> allMedicaments = (List<Medicament>) request.getServletContext().getAttribute("allMedicaments");
-    List<Investigation> allInvestigations = (List<Investigation>) request.getServletContext().getAttribute("allInvestigations");
+    Consultation consultation = (Consultation) request.getServletContext().getAttribute("consultation");
+
     List<Service> allServices = (List<Service>) request.getServletContext().getAttribute("allServices");
     List<Patient> allPatients = (List<Patient>) request.getServletContext().getAttribute("allPatients");
     List<Consultation> allConsultations = (List<Consultation>) request.getServletContext().getAttribute("allConsultations");
+    List<Investigation> allInvestigations = (List<Investigation>) request.getServletContext().getAttribute("allInvestigations");
+    List<Medicament> allMedicaments = (List<Medicament>) request.getServletContext().getAttribute("allMedicaments");
     int size = 0;
     if (allConsultations != null) {
         size = allConsultations.size();
@@ -155,59 +156,95 @@
 
         <div class=" w3-margin w3-card-4 w3-white" >
 
-            <div class="w3-container w3-lime">
-                <h2>Formulaire d'ajout d'investigation : Etape 1/2</h2>
+            <div class="w3-container w3-yellow">
+                <h2>Formulaire de modification de Consultation Medical </h2>
             </div>
 
             <form action="./EditConsultation" method="post" class="w3-container w3-row-padding w3-margin">
+                <script>
+                    function showForm(id) {
+                        var divCon, divInve, checkbox;
 
-                <input type="hidden" name="id" value="<%out.print("" + currentConsultation.getId());%>" />
+                        divCon = document.getElementById("con");
+                        divInve = document.getElementById("inv");
 
-                <select class="w3-select w3-large w3-margin-bottom" required="" autocomplete="" name ="serviceID">
-                    <option value=" " disabled="">
+                        if (id === 1) {
+                            checkbox = document.getElementById("ordononce");
+
+                            if (checkbox.checked) {
+
+                                divCon.style.display = "block";
+                            } else {
+                                divCon.style.display = "none";
+
+                            }
+
+                        } else {
+                            checkbox = document.getElementById("investigation");
+
+                            if (checkbox.checked) {
+
+                                divInve.style.display = "block";
+                            } else {
+                                divInve.style.display = "none";
+
+                            }
+                        }
+
+                    }
+                </script>
+
+                <input type="hidden" name="id" value="<%out.print(consultation.getId());%>"/>
+                <select class="w3-select w3-large w3-margin-bottom" autocomplete="" name ="idService">
+                    <option value=" " disabled="" selected="">
                         Choisir le Service
                     </option>
 
                     <%
                         for (int i = 0; i < allServices.size(); i++) {
                     %>
-                        <option <%if (allServices.get(i).getId().intValue() == currentConsultation.getService().getId().intValue()) {
-                            out.print(" selected ");
-                        }%> value="<%out.print(allServices.get(i).getId());%>"> <%out.print(allServices.get(i).getTitre());%> </option>
+                    <option 
+                        <%if (consultation.getService().getId().intValue() == allServices.get(i).getId().intValue()) {
+                                out.print("selected");
+                            }%>
+                        value="<%out.print(allServices.get(i).getId());%>"> <%out.print(allServices.get(i).getTitre());%> </option>
                     <%}%>
                 </select>
 
                 <br>
-                <select class="w3-select w3-large w3-margin-bottom" autocomplete="" name ="patientID">
-                    <option value=" " disabled="" >
+                <select class="w3-select w3-large w3-margin-bottom" autocomplete="" name ="idPatient">
+                    <option value=" " disabled="" selected="">
                         Choisir le patient
                     </option>
 
                     <%
                         for (int i = 0; i < allPatients.size(); i++) {
                     %>
-                        <option <%if (allPatients.get(i).getId().intValue() == currentConsultation.getPatient().getId().intValue()) {
-                            out.print("selected ");
-                        }%> value="<%out.print(allPatients.get(i).getId());%>"> <%out.print(allPatients.get(i).getInfoPersonnel().getNom() + " " + allPatients.get(i).getInfoPersonnel().getPrenom());%> </option>
+                    <option 
+                        <%if (allPatients.get(i).getId().intValue() == consultation.getPatient().getId().intValue()) {
+                                out.print("selected");
+                            }%>
+                        value="<%out.print(allPatients.get(i).getId());%>"> <%out.print(allPatients.get(i).getInfoPersonnel().getNom() + " " + allPatients.get(i).getInfoPersonnel().getPrenom());%> </option>
                     <%}%>
                 </select>
 
                 <br>
 
                 <div class="w3-row">
-                    <input class="w3-input w3-large w3-col s3 w3-margin-right w3-border-bottom w3-hover-text-blue w3-hover-border-blue "  required="" name="tension" type="text" value="<%out.print(currentConsultation.getExamenPreClinique().getTension());%>" placeholder="Mesure de tension " />
-                    <input class="w3-input w3-large w3-col s3 w3-margin-right w3-border-bottom w3-hover-text-blue w3-hover-border-blue "  required="" name="taille" type="text" value="<%out.print(currentConsultation.getExamenPreClinique().getTaille());%>" placeholder="Taille " />
-                    <input class="w3-input w3-large w3-col s3 w3-margin-right w3-border-bottom w3-hover-text-blue w3-hover-border-blue "  required="" name="poids" type="text" value="<%out.print(currentConsultation.getExamenPreClinique().getPoids());%>" placeholder="Poid " />
-                    <input class="w3-input w3-large w3-col s2 w3-border-bottom w3-hover-text-blue w3-hover-border-blue "  required="" name="glycemie" type="text" value="<%out.print(currentConsultation.getExamenPreClinique().getGlycemie());%>" placeholder="Glécemie " />
+                    <input class="w3-input w3-large w3-col s3 w3-margin-right w3-border-bottom w3-hover-text-blue w3-hover-border-blue " <%out.print("value=\"" + consultation.getExamenPreClinique().getTension() + "\"");%>  required="" name="tension" type="text" placeholder="Mesure de tension " />
+                    <input class="w3-input w3-large w3-col s3 w3-margin-right w3-border-bottom w3-hover-text-blue w3-hover-border-blue " <%out.print("value=\"" + consultation.getExamenPreClinique().getTaille() + "\"");%> required="" name="taille" type="text" placeholder="Taille " />
+                    <input class="w3-input w3-large w3-col s3 w3-margin-right w3-border-bottom w3-hover-text-blue w3-hover-border-blue " <%out.print("value=\"" + consultation.getExamenPreClinique().getPoids() + "\"");%> required="" name="poids" type="text" placeholder="Poid " />
+                    <input class="w3-input w3-large w3-col s2 w3-border-bottom w3-hover-text-blue w3-hover-border-blue " <%out.print("value=\"" + consultation.getExamenPreClinique().getGlycemie() + "\"");%>  required="" name="glycemie" type="text" placeholder="Glécemie " />
                 </div>
 
-
+                <br>
+                <input type="checkbox" class="w3-check " name="ordonnanceType"  onclick="showForm(1)" id="ordononce"  /> <label for="ordononce" >  Ordonance Medicament</label>
                 <script>
-                    function myFunctionA() {
-                        var input, filter, ul, li, a, i;
-                        input = document.getElementById("myInput");
+                    function searchMedic() {
+                        var input, filter, ul, li, i;
+                        input = document.getElementById("seachMedic");
                         filter = input.value.toUpperCase();
-                        ul = document.getElementById("my");
+                        ul = document.getElementById("myList");
                         li = ul.getElementsByTagName("li");
                         for (i = 0; i < li.length; i++) {
                             if (li[i].innerHTML.toUpperCase().indexOf(filter) > -1) {
@@ -217,38 +254,70 @@
                             }
                         }
                     }
+                    function addMedic(id, title) {
+                        var tbody = document.getElementById("tableMedic").getElementsByTagName("tbody");
+                        var doIt = 0;
+                        for (var i = 0; i < tbody.length; i++) {
+                            if (tbody[i].innerHTML.toUpperCase().indexOf(title.toUpperCase()) > -1) {
+                                doIt = 1;
+                                break;
+                            }
+                        }
+
+                        if (doIt == 0) {
+                            document.getElementById("tableMedic").getElementsByTagName("tbody")[0].innerHTML += "<tr onClick='removeMedic(this)'> <input id='" + id + "' type='hidden' name='medicamentAdded' value='" + id + "' /> <td>" + title + "</td></tr>";
+                        }
+
+                    }
+                    function removeMedic(r) {
+                        var i = r.rowIndex;
+                        document.getElementById("tableMedic").deleteRow(i);
+                    }
                 </script>
-
-                <div class="w3-container w3-indigo">
-                    <h2>
-                        Liste des Médicament Préscrits.
-                    </h2>
+                <div id="con" class="w3-container" style="display:  none;">
+                    <br>
+                    <br>
+                    <div>
+                        <div class="w3-container w3-red">
+                            <h2>Liste des Medicaments</h2>
+                        </div>
+                        <input type="search" class="w3-input w3-border" id="seachMedic" onkeyup="searchMedic()" placeholder="rechercher un medicament" />
+                        <ul class="w3-ul" id="myList" style="max-height: 560px;overflow-y: auto;">
+                            <%for (int i = 0; i < allMedicaments.size(); i++) {%>
+                            <li  class="w3-li w3-large w3-light-gray  w3-hover-indigo" id="<%out.print(allMedicaments.get(i).getId());%>" onclick="addMedic(<%out.print(allMedicaments.get(i).getId());%>, '<%out.print(allMedicaments.get(i).getTitre());%>')"> <%out.print(allMedicaments.get(i).getTitre());%> </li>
+                                <%}%>
+                        </ul>
+                        <br>    
+                        <br>
+                        <table id="tableMedic" class="w3-table-all w3-hoverable ">
+                            <thead>
+                                <tr> <th><b>Ordonance </b></th> </tr>
+                            </thead>
+                            <tbody>
+                                <%
+                                    if (consultation.getOrdonnances().size() > 0) {
+                                        List<Medicament> ordoMedicaments= consultation.getOrdonnances().get(0).getMedicaments();
+                                        for(int i = 0 ; i<ordoMedicaments.size() ; i++){
+                                            out.print("<tr onClick='removeMedic(this)'>"
+                                                    + "     <td>"+ordoMedicaments.get(i).getTitre()+" </td> <input id=\""+ordoMedicaments.get(i).getId()+"\" type=\"hidden\" name=\"medicamentAdded\" value=\""+ordoMedicaments.get(i).getId()+"\" />" 
+                                                    + "</tr>");
+                                        }
+                                    }
+                                %>
+                            </tbody>
+                        </table>
+                        <br>    
+                        <br>
+                    </div>
                 </div>
-                <div class="w3-border">
-                    <input class="w3-input w3-large w3-border-bottom " type="text" placeholder="Search for names.." id="myInput" onkeyup="myFunctionA()">
-                    <ul class="w3-ul  w3-margin-top" id="my">
+                <br>
 
-                        <%
-                            for (int i = 0; i < allMedicaments.size(); i++) {
-                        %>
-                        <li class="w3-li w3-hover-green" > 
-                            <span class="w3-large "><%out.print(allMedicaments.get(i).getTitre());%> 
-                                <input type="checkbox" class="w3-check w3-right " name="listMedecins"  value="<%out.print(allMedicaments.get(i).getId());%>">
-                            </span> 
-                        </li>
-
-                        <%}%>
-
-                    </ul>
-                </div>
-
-<%%>
                 <script>
-                    function myFunction() {
-                        var input, filter, ul, li, a, i;
-                        input = document.getElementById("myInput");
+                    function searchInv() {
+                        var input, filter, ul, li, i;
+                        input = document.getElementById("seachInv");
                         filter = input.value.toUpperCase();
-                        ul = document.getElementById("my");
+                        ul = document.getElementById("myInvs");
                         li = ul.getElementsByTagName("li");
                         for (i = 0; i < li.length; i++) {
                             if (li[i].innerHTML.toUpperCase().indexOf(filter) > -1) {
@@ -258,73 +327,115 @@
                             }
                         }
                     }
+                    function addInv(id, title) {
+                        var tbody = document.getElementById("tableInv").getElementsByTagName("tbody");
+                        var doIt = 0;
+                        for (var i = 0; i < tbody.length; i++) {
+                            if (tbody[i].innerHTML.toUpperCase().indexOf(title.toUpperCase()) > -1) {
+                                doIt = 1;
+                                break;
+                            }
+                        }
+
+                        if (doIt == 0) {
+                            document.getElementById("tableInv").getElementsByTagName("tbody")[0].innerHTML += " <tr onClick='removeInv(this)'> <input id='" + id + "' type='hidden' name='InvestigationAdded' value='" + id + "' /> <td>" + title + "</td></tr>";
+                        }
+
+                    }
+                    function removeInv(r) {
+                        var i = r.rowIndex;
+                        document.getElementById("tableInv").deleteRow(i);
+                    }
                 </script>
 
-                <div class="w3-container w3-indigo">
-                    <h2>
-                        Liste des Investigation Demandé.
-                    </h2>
+                <input type="checkbox" class="w3-check " name="investigationType" onclick="showForm(2)" id="investigation"  /> <label for="ordononce" >  Ordonance Investigation</label>
+                <div id="inv" class="w3-container w3-border-red" style="display:  none;">
+                    <br>
+                    <br>
+                    <div>
+                        <div class="w3-container w3-blue-gray w3-blue-grey ">
+                            <h2>Liste des Analyses</h2>
+                        </div>
+                        <input type="search" class="w3-input w3-border" id="seachInv" onkeyup="searchInv()" placeholder="rechercher une Analyse" />
+                        <ul class="w3-ul" id="myInvs" style="max-height: 560px;overflow-y: auto;">
+                            <%for (int i = 0; i < allInvestigations.size(); i++) {%>
+                            <li  class="w3-li w3-large w3-light-gray  w3-hover-indigo" id="<%out.print(allInvestigations.get(i).getId());%>" onclick="addInv(<%out.print(allInvestigations.get(i).getId());%>, '<%out.print(allInvestigations.get(i).getTitre());%>')"> <%out.print(allInvestigations.get(i).getTitre());%> </li>
+                                <%}%>
+                        </ul>
+                        <br>    
+                        <br>
+                        <table id="tableInv" class="w3-table-all w3-hoverable ">
+                            <thead>
+                                <tr> <th><b>Analyses </b></th> </tr>
+                            </thead>
+                            <tbody>
+                                <%
+                                    if (consultation.getOrdonnances().size() > 0) {
+                                        List<Investigation> ordoMedicaments= consultation.getOrdonnances().get(0).getInvestigations();
+                                        for(int i = 0 ; i<ordoMedicaments.size() ; i++){
+                                            out.print("<tr onClick='removeInv(this)'>"
+                                                    + "     <td>"+ordoMedicaments.get(i).getTitre()+" </td> <input id=\""+ordoMedicaments.get(i).getId()+"\" type=\"hidden\" name=\"InvestigationAdded\" value=\""+ordoMedicaments.get(i).getId()+"\" />" 
+                                                    + "</tr>");
+                                        }
+                                    }
+                                %>
+                            </tbody>
+                        </table>
+                        <br>    
+                        <br>
+                    </div>
                 </div>
-                <div class="w3-border">
-                    <input class="w3-input w3-large w3-border-bottom " type="text" placeholder="Search for names.." id="myInput" onkeyup="myFunction()">
-                    <ul class="w3-ul  w3-margin-top" id="my">
 
-                        <%
-                            for (int i = 0; i < allInvestigations.size(); i++) {
-                        %>
-                        <li class="w3-li w3-hover-green" > 
-                            <span class="w3-large "><%out.print(allInvestigations.get(i).getTitre());%> 
-                                <input <%if(allInvestigations.get(i).getId().intValue()==currentConsultation.getOrdonnances().get(i).getInvestigations().get(i).getId().intValue()){}%> type="checkbox" class="w3-check w3-right " name="listMedecins"  value="<%out.print(allInvestigations.get(i).getId());%>">
-                            </span> 
-                        </li>
+                <br>
 
-                        <%}%>
 
-                    </ul>
-                </div>
-<%%>
                 <button class="w3-button w3-indigo w3-margin-bottom w3-margin-top" type="submit"> Confirmer </button>
                 <button class="w3-button w3-teal w3-right w3-margin-bottom w3-margin-top" type="reset"> Annuler </button>
 
             </form>
 
+
+
         </div>
 
-        <!-- Footer -->
-        <!-- Footer -->
-        <footer class="w3-container w3-padding-16 w3-light-grey">
-            <h4>Clinique v 0.1</h4>
-            <p>Développer par :</p>
-        </footer>
 
-        <!-- End page content -->
-        <!-- End page content -->
     </div>
 
-    <script>
-        // Get the Sidebar
-        var mySidebar = document.getElementById("mySidebar");
+    <!-- Footer -->
+    <!-- Footer -->
+    <footer class="w3-container w3-padding-16 w3-light-grey">
+        <h4>Clinique v 0.1</h4>
+        <p>Développer par :</p>
+    </footer>
 
-        // Get the DIV with overlay effect
-        var overlayBg = document.getElementById("myOverlay");
+    <!-- End page content -->
+    <!-- End page content -->
+</div>
 
-        // Toggle between showing and hiding the sidebar, and add overlay effect
-        function w3_open() {
-            if (mySidebar.style.display === 'block') {
-                mySidebar.style.display = 'none';
-                overlayBg.style.display = "none";
-            } else {
-                mySidebar.style.display = 'block';
-                overlayBg.style.display = "block";
-            }
-        }
+<script>
+    // Get the Sidebar
+    var mySidebar = document.getElementById("mySidebar");
 
-        // Close the sidebar with the close button
-        function w3_close() {
-            mySidebar.style.display = "none";
+    // Get the DIV with overlay effect
+    var overlayBg = document.getElementById("myOverlay");
+
+    // Toggle between showing and hiding the sidebar, and add overlay effect
+    function w3_open() {
+        if (mySidebar.style.display === 'block') {
+            mySidebar.style.display = 'none';
             overlayBg.style.display = "none";
+        } else {
+            mySidebar.style.display = 'block';
+            overlayBg.style.display = "block";
         }
-    </script>
+    }
+
+    // Close the sidebar with the close button
+    function w3_close() {
+        mySidebar.style.display = "none";
+        overlayBg.style.display = "none";
+    }
+</script>
 
 </body>
 </html>

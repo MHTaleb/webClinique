@@ -180,6 +180,8 @@
                     if (size > 0) {
 
                         for (int i = 0; i < size; i++) {
+                            try{
+                        if(allConsultations.get(i).getPatient() != null && allConsultations.get(i).getMedecin()!= null  ){
                 %>
                 <li class="w3-padding-16">
                     <form action="./ConsultationRemove" method="post" id="form<%=i%>">
@@ -193,6 +195,8 @@
 
                 </li>
                 <%}
+                        }catch(Exception e){}
+                        }
                 } else {%>
                 <%}%>
             </ul>

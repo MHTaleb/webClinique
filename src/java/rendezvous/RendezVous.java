@@ -110,7 +110,7 @@ public class RendezVous extends HttpServlet {
         String    serviceName = "";
 
         for (RDV rdv : rdvs) {
-            if (rdv.getService().getId() == Long.valueOf(serviceID)) {
+            if (rdv.getService().getId().intValue() == Long.valueOf(serviceID).intValue()) {
                 found++;
                 serviceName = rdv.getService().getTitre();
             }

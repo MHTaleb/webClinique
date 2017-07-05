@@ -21,10 +21,12 @@ import javax.servlet.http.HttpServletResponse;
 import beans.ConsultationFacadeLocal;
 import beans.InvestigationFacadeLocal;
 import beans.MedicamentFacadeLocal;
+import beans.OrdonnanceFacadeLocal;
 
 import entity.Consultation;
 import entity.Investigation;
 import entity.Medicament;
+import entity.Ordonnance;
 
 /**
  *
@@ -35,6 +37,9 @@ import entity.Medicament;
     urlPatterns = "/ConsultationRemove"
 )
 public class ConsultationRemove extends HttpServlet {
+
+    @EJB
+    private OrdonnanceFacadeLocal ordonnanceFacade;
     @EJB
     private InvestigationFacadeLocal investigationFacade;
     @EJB
@@ -80,6 +85,10 @@ public class ConsultationRemove extends HttpServlet {
 
         if (option.equalsIgnoreCase("delete")) {
             consultationFacade.remove(consultation);
+            for (Ordonnance ordonnance : consultation.getOrdonnances()) {
+                ordonnanceFacade.remove(ordonnance);
+            }
+
             request.getRequestDispatcher("/Consultation").forward(request, response);
         } else {
             List<Medicament> allMedicaments = medicamentFacade.findAll();
